@@ -2,27 +2,31 @@
 
 Find definitions, references, and inferred types in saved Rust, TypeScript, and JavaScript files using your local language server.
 
-## Install from the GitHub marketplace
-
-On macOS (Apple Silicon or Intel), add the marketplace once.
+## Install
+>macOS only (Apple Silicon or Intel)
 
 ```sh
 codex plugin marketplace add frontboat/LSP-MCP
 ```
 
-Install the plugin you want, then run its setup skill in a new local Codex chat.
+Install the plugins, run setup skills
 
-| Plugin | Run in your terminal | Tell Codex |
-| --- | --- | --- |
-| Rust | `codex plugin add rust-lsp@lsp-mcp-local` | Use the `setup-rust-lsp` skill. |
-| TypeScript / JavaScript | `codex plugin add typescript-lsp@lsp-mcp-local` | Use the `setup-typescript-lsp` skill. |
+```sh
+codex plugin add rust-lsp@lsp-mcp-local
+codex plugin add typescript-lsp@lsp-mcp-local
+```
+```txt
+Use the `setup-rust-lsp` and `setup-typescript-lsp` skills to setup our LSP MCPs.
+```
+>*Codex needs `rust-analyzer` on its `PATH` for Rust (`rustup component add rust-analyzer rust-src`), or a native `tsc` that supports `tsc --lsp --stdio` for TypeScript and JavaScript.*
 
-Codex needs `rust-analyzer` on its `PATH` for Rust (`rustup component add rust-analyzer rust-src`), or a native `tsc` that supports `tsc --lsp --stdio` for TypeScript and JavaScript.
-
-To update, run `codex plugin marketplace upgrade lsp-mcp-local` and repeat your install command.
+## Update
+```sh
+codex plugin marketplace upgrade lsp-mcp-local` and repeat your install command.
+```
 
 <details>
-<summary>MCP tools</summary>
+<summary>Tools</summary>
 
 - `go_to_definition` returns file paths and source ranges for matching definitions.
 - `find_references` lists uses. Pass `include_declaration: false` to skip the declaration.
@@ -33,11 +37,12 @@ Pass an absolute `file` path or a path relative to an absolute `workspace`. Line
 </details>
 
 <details>
-<summary>Build from source or register a standalone MCP server</summary>
+<summary>Build from source or solo MCP</summary>
 
-For a Linux build or local development, clone this repo. Install Rust, Cargo, Python 3, and the `rust-docs` component. On macOS, install the Xcode command line tools and run `rustup target add aarch64-apple-darwin x86_64-apple-darwin`.
+`rustup target add aarch64-apple-darwin x86_64-apple-darwin`.
 
-Run these commands from the repo root. For TypeScript, substitute `typescript-lsp` for `rust-lsp`.
+From source
+>*For TypeScript, substitute `typescript-lsp` for `rust-lsp`.*
 
 ```sh
 ./scripts/package-plugin.sh rust-lsp
@@ -45,7 +50,8 @@ codex plugin marketplace add "$PWD"
 codex plugin add rust-lsp@lsp-mcp-local
 ```
 
-To register the bridge as a standalone MCP server, supply your project’s absolute path. For TypeScript, use `typescript-lsp` and `--language typescript`.
+Solo MCP server, supply your project’s absolute path
+>*For TypeScript, use `typescript-lsp` and `--language typescript`.*
 
 ```sh
 cargo build --release --locked
@@ -54,4 +60,6 @@ codex mcp add rust-lsp -- "$PWD/target/release/lsp-mcp" --language rust --worksp
 
 </details>
 
-Local LSP Tools · [Downloads and checksums](https://github.com/frontboat/LSP-MCP/releases) · [Support](https://github.com/frontboat/LSP-MCP/issues) · [Privacy](PRIVACY.md) · [Terms](LICENSE)
+---
+
+[Downloads and checksums](https://github.com/frontboat/LSP-MCP/releases) · [Support](https://github.com/frontboat/LSP-MCP/issues) · [Privacy](PRIVACY.md) · [Terms](LICENSE)
