@@ -4,6 +4,30 @@ Ask Codex to find a symbol’s definition, list its references, or show its type
 
 Local LSP Tools maintains both plugins. [Support](https://github.com/frontboat/LSP-MCP/issues) · [Privacy](PRIVACY.md) · [Terms](LICENSE)
 
+## Install from the GitHub marketplace
+
+On **macOS (Apple Silicon or Intel)**, each plugin includes the compiled MCP bridge. Run this once from any directory to add the marketplace.
+
+```sh
+codex plugin marketplace add frontboat/LSP-MCP
+```
+
+Run the command for each language you use.
+
+```sh
+codex plugin add rust-lsp@lsp-mcp-local
+codex plugin add typescript-lsp@lsp-mcp-local
+```
+
+The bridge uses the language server on Codex’s `PATH`.
+
+- **Rust** requires `rust-analyzer`. With rustup, run `rustup component add rust-analyzer rust-src` to install the server and standard library sources.
+- **TypeScript and JavaScript** require a native `tsc` that supports `tsc --lsp --stdio` (tested with 7.0.2).
+
+Open a new local Codex chat in your project. Select **@Rust LSP** or **@TypeScript LSP** and ask it to run its setup check. Each plugin includes a small project with a known definition to look up.
+
+To update, run `codex plugin marketplace upgrade lsp-mcp-local`, then repeat the `codex plugin add` command for each plugin you use.
+
 ## Use the tools
 
 | Tool | Result |
@@ -33,11 +57,9 @@ Use an absolute file path or pass an absolute `workspace` with a relative file p
 
 Before each lookup the bridge rereads documents it has opened, sends versioned changes for edits, and closes deleted documents. Edits to files the bridge has never opened depend on the language server’s filesystem watcher and can take a moment to appear.
 
-## Install locally
+## Build from source
 
-Make the language server available on Codex’s `PATH`. For Rust, use `rust-analyzer` (tested with 1.94.1). With rustup, `rustup component add rust-analyzer rust-src` installs the server and standard library sources. For TypeScript, use a native compiler that supports `tsc --lsp --stdio` (tested with 7.0.2). To select an executable explicitly, set `LSP_MCP_RUST_ANALYZER` or `LSP_MCP_TSC` in the server environment.
-
-Clone or download this repository, then run these commands from the project root to build the bridge for your machine and install the plugin.
+For development or a native Linux build, clone this repository and run the following from its root. The packaging script uses Rust, Cargo, and Python 3. On macOS it also uses the Xcode command line tools and both Rust targets (`rustup target add aarch64-apple-darwin x86_64-apple-darwin`). With a minimal rustup toolchain, install the standard library license notices with `rustup component add rust-docs`.
 
 ```sh
 ./scripts/package-plugin.sh rust-lsp
@@ -45,7 +67,7 @@ codex plugin marketplace add "$PWD"
 codex plugin add rust-lsp@lsp-mcp-local
 ```
 
-For TypeScript, use `typescript-lsp` in both plugin commands. Register the marketplace once. Open a fresh local Codex chat in your project, select **Rust LSP** or **TypeScript LSP**, and ask “Find the definition of the function called on this line and list its other callers.” The package script also writes a platform-specific archive under `dist/`.
+For TypeScript, substitute `typescript-lsp` in the package and install commands. The packaging script also writes an archive under `dist/`. To select a language server explicitly, set `LSP_MCP_RUST_ANALYZER` or `LSP_MCP_TSC` in the MCP server environment.
 
 ### Direct stdio registration
 

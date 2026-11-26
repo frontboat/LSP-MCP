@@ -20,7 +20,7 @@
         ]
       },
       "category": "Developer Tools",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "description": "Find definitions, references, and inferred types in local TypeScript and JavaScript projects.",
       "keywords": [
         "TypeScript",
@@ -79,7 +79,7 @@
         ]
       },
       "category": "Developer Tools",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "description": "Find definitions, references, types, and documentation in local Rust projects using rust-analyzer.",
       "keywords": [
         "Rust",

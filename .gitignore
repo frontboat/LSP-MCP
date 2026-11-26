@@ -1,6 +1,9 @@
 /target/
 /dist/
-/plugins/*/bin/
+/plugins/*/bin/*
+!/plugins/*/bin/lsp-mcp
+!/plugins/*/bin/THIRD-PARTY-NOTICES.txt
+!/plugins/*/bin/RUST-LIBRARY-LICENSES.html
 .DS_Store
 /mcp-docs/
 /.agents/skills/
