@@ -28,6 +28,8 @@ Open a new local Codex chat in your project. Select **@Rust LSP** or **@TypeScri
 
 To update, run `codex plugin marketplace upgrade lsp-mcp-local`, then repeat the `codex plugin add` command for each plugin you use.
 
+For a standalone download, both macOS plugin archives and their SHA-256 checksums are available in [GitHub Releases](https://github.com/frontboat/LSP-MCP/releases).
+
 ## Use the tools
 
 | Tool | Result |

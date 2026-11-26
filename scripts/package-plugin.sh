@@ -31,6 +31,11 @@ fi
 python3 scripts/dependency-notices.py "$package/bin" "$@"
 install -m 755 "$binary" "$package/bin/lsp-mcp"
 archive="dist/$plugin-$platform.tar.gz"
-COPYFILE_DISABLE=1 tar -czf "$archive" -C "$package" plugin.json mcp.json assets skills \
+# Store portable permissions and omit the packager's ownership and extended attributes.
+case "$(tar --version)" in
+    *bsdtar*) set -- --uid 0 --gid 0 --uname root --gname root ;;
+    *) set -- --owner=0 --group=0 ;;
+esac
+COPYFILE_DISABLE=1 tar --format=ustar "$@" --exclude=.DS_Store -czf "$archive" -C "$package" plugin.json mcp.json assets skills \
     bin/lsp-mcp bin/THIRD-PARTY-NOTICES.txt bin/RUST-LIBRARY-LICENSES.html
 printf '%s\n' "$archive"
