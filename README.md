@@ -21,9 +21,12 @@ Use the `setup-rust-lsp` and `setup-typescript-lsp` skills to setup our LSP MCPs
 >*Codex needs `rust-analyzer` on its `PATH` for Rust (`rustup component add rust-analyzer rust-src`), or a native `tsc` that supports `tsc --lsp --stdio` for TypeScript and JavaScript.*
 
 ## Update
+
 ```sh
-codex plugin marketplace upgrade lsp-mcp-local` and repeat your install command.
+codex plugin marketplace upgrade lsp-mcp-local
 ```
+
+Then rerun `codex plugin add` for each plugin you installed.
 
 <details>
 <summary>Tools</summary>
