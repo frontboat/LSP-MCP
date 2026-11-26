@@ -4,25 +4,22 @@ Find definitions, references, and inferred types in saved Rust, TypeScript, and 
 
 ## Install from the GitHub marketplace
 
-Both plugins include a prebuilt bridge for Apple Silicon and Intel Macs. Add the marketplace once, then run the install command for each language you use.
+On macOS (Apple Silicon or Intel), add the marketplace once.
 
 ```sh
 codex plugin marketplace add frontboat/LSP-MCP
-
-codex plugin add rust-lsp@lsp-mcp-local
-codex plugin add typescript-lsp@lsp-mcp-local
 ```
 
-Put your language server on Codex’s `PATH`.
+Install the plugin you want, then run its setup skill in a new local Codex chat.
 
-- For Rust, install `rust-analyzer` and the standard library sources with `rustup component add rust-analyzer rust-src`.
-- For TypeScript and JavaScript, use a native `tsc` with support for `tsc --lsp --stdio` (tested with 7.0.2).
+| Plugin | Run in your terminal | Tell Codex |
+| --- | --- | --- |
+| Rust | `codex plugin add rust-lsp@lsp-mcp-local` | Use the `setup-rust-lsp` skill. |
+| TypeScript / JavaScript | `codex plugin add typescript-lsp@lsp-mcp-local` | Use the `setup-typescript-lsp` skill. |
 
-Start a new local Codex chat. Select **@Rust LSP** or **@TypeScript LSP** and try the bundled example.
+Codex needs `rust-analyzer` on its `PATH` for Rust (`rustup component add rust-analyzer rust-src`), or a native `tsc` that supports `tsc --lsp --stdio` for TypeScript and JavaScript.
 
-> Find the definition of `double` in your example project and show me its callers.
-
-To update, run `codex plugin marketplace upgrade lsp-mcp-local`, then repeat the install command for each plugin.
+To update, run `codex plugin marketplace upgrade lsp-mcp-local` and repeat your install command.
 
 <details>
 <summary>MCP tools</summary>
