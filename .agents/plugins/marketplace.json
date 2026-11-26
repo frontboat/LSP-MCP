@@ -1,0 +1,125 @@
+{
+  "name": "lsp-mcp-local",
+  "interface": {
+    "displayName": "Local LSP Tools"
+  },
+  "plugins": [
+    {
+      "name": "typescript-lsp",
+      "source": {
+        "source": "local",
+        "path": "./plugins/typescript-lsp"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL",
+        "products": [
+          "codex",
+          "chatgpt",
+          "atlas"
+        ]
+      },
+      "category": "Developer Tools",
+      "version": "0.1.3",
+      "description": "Find definitions, references, and inferred types in local TypeScript and JavaScript projects.",
+      "keywords": [
+        "TypeScript",
+        "JavaScript",
+        "TSX",
+        "JSX",
+        "code navigation",
+        "LSP"
+      ],
+      "author": {
+        "name": "Local LSP Tools",
+        "email": "156139764+frontboat@users.noreply.github.com",
+        "url": "https://github.com/frontboat"
+      },
+      "homepage": "https://github.com/frontboat/LSP-MCP#readme",
+      "displayName": "TypeScript LSP",
+      "interface": {
+        "displayName": "TypeScript LSP",
+        "shortDescription": "Trace imports and infer types",
+        "longDescription": "Follow an import to the file that defines it, or see which files use an exported type before you change it. TypeScript LSP uses your local TypeScript compiler to resolve symbols in saved TypeScript and JavaScript files, including TSX and JSX. Ask for a symbol’s inferred type and documentation even when the source has no explicit type annotation.",
+        "developerName": "Local LSP Tools",
+        "category": "Developer Tools",
+        "capabilities": [
+          "Read"
+        ],
+        "websiteURL": "https://github.com/frontboat/LSP-MCP#readme",
+        "privacyPolicyURL": "https://github.com/frontboat/LSP-MCP/blob/main/PRIVACY.md",
+        "termsOfServiceURL": "https://github.com/frontboat/LSP-MCP/blob/main/LICENSE",
+        "defaultPrompt": [
+          "Follow an import to its definition",
+          "Find every use of an exported type in my project",
+          "Show the inferred return type of a function"
+        ],
+        "brandColor": "#2869B3",
+        "logo": "./assets/icon.png",
+        "logoDark": "./assets/icon.png",
+        "composerIcon": "./assets/icon.png",
+        "screenshots": [
+          "./assets/navigation.png"
+        ]
+      }
+    },
+    {
+      "name": "rust-lsp",
+      "source": {
+        "source": "local",
+        "path": "./plugins/rust-lsp"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL",
+        "products": [
+          "codex",
+          "chatgpt",
+          "atlas"
+        ]
+      },
+      "category": "Developer Tools",
+      "version": "0.1.3",
+      "description": "Find definitions, references, types, and documentation in local Rust projects using rust-analyzer.",
+      "keywords": [
+        "Rust",
+        "rust-analyzer",
+        "Cargo",
+        "code navigation",
+        "LSP"
+      ],
+      "author": {
+        "name": "Local LSP Tools",
+        "email": "156139764+frontboat@users.noreply.github.com",
+        "url": "https://github.com/frontboat"
+      },
+      "homepage": "https://github.com/frontboat/LSP-MCP#readme",
+      "displayName": "Rust LSP",
+      "interface": {
+        "displayName": "Rust LSP",
+        "shortDescription": "Trace Rust symbols and types",
+        "longDescription": "Follow a method call to its definition or find the code that uses a struct before you change its fields. Rust LSP asks rust-analyzer about the saved code in your workspace and returns file paths and line numbers. You can also read a function’s signature and rustdoc, including for standard library items when their sources are installed.",
+        "developerName": "Local LSP Tools",
+        "category": "Developer Tools",
+        "capabilities": [
+          "Read"
+        ],
+        "websiteURL": "https://github.com/frontboat/LSP-MCP#readme",
+        "privacyPolicyURL": "https://github.com/frontboat/LSP-MCP/blob/main/PRIVACY.md",
+        "termsOfServiceURL": "https://github.com/frontboat/LSP-MCP/blob/main/LICENSE",
+        "defaultPrompt": [
+          "Trace a method call to its definition",
+          "Find where a public struct is used in my workspace",
+          "Show the signature and rustdoc for a function"
+        ],
+        "brandColor": "#B64E27",
+        "logo": "./assets/icon.png",
+        "logoDark": "./assets/icon-on-light.svg",
+        "composerIcon": "./assets/icon-on-light.svg",
+        "screenshots": [
+          "./assets/navigation.png"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,161 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "typescript-lsp",
+  "version": "0.1.3",
+  "author": {
+    "name": "Local LSP Tools",
+    "email": "156139764+frontboat@users.noreply.github.com",
+    "url": "https://github.com/frontboat"
+  },
+  "description": "Find definitions, references, and inferred types in local TypeScript and JavaScript projects.",
+  "keywords": [
+    "TypeScript",
+    "JavaScript",
+    "TSX",
+    "JSX",
+    "code navigation",
+    "LSP"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "TypeScript LSP",
+        "shortDescription": "Trace imports and infer types",
+        "longDescription": "Follow an import to the file that defines it, or see which files use an exported type before you change it. TypeScript LSP uses your local TypeScript compiler to resolve symbols in saved TypeScript and JavaScript files, including TSX and JSX. Ask for a symbol’s inferred type and documentation even when the source has no explicit type annotation.",
+        "developerName": "Local LSP Tools",
+        "category": "Developer Tools",
+        "capabilities": [
+          "Read"
+        ],
+        "defaultPrompt": [
+          "Follow an import to its definition",
+          "Find every use of an exported type in my project",
+          "Show the inferred return type of a function"
+        ],
+        "brandColor": "#2869B3",
+        "logo": "./assets/icon.png",
+        "composerIcon": "./assets/icon.png",
+        "websiteURL": "https://github.com/frontboat/LSP-MCP#readme",
+        "supportURL": "https://github.com/frontboat/LSP-MCP/issues",
+        "privacyPolicyURL": "https://github.com/frontboat/LSP-MCP/blob/main/PRIVACY.md",
+        "termsOfServiceURL": "https://github.com/frontboat/LSP-MCP/blob/main/LICENSE",
+        "brandColorDark": "#82B8F3",
+        "composerIconDark": "./assets/icon.png",
+        "logoDark": "./assets/icon.png",
+        "screenshots": [
+          "./assets/navigation.png"
+        ]
+      },
+      "onboardingSkill": "./skills/setup-typescript-lsp/SKILL.md",
+      "hooks": [],
+      "requires_local_executor": true,
+      "review": {
+        "prompts": [
+          "Follow an import to its definition",
+          "Find every use of an exported type in my project",
+          "Show the inferred return type of a function"
+        ],
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Use the bundled example workspace. Follow a function call across files.",
+              "prompt": "Where is the function called on line 2 of main.ts defined?",
+              "file_attachment_urls": [
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/typescript-lsp/skills/setup-typescript-lsp/example/main.ts",
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/typescript-lsp/skills/setup-typescript-lsp/example/math.ts"
+              ],
+              "expected_output_url": "https://github.com/frontboat/LSP-MCP/blob/main/review/typescript/results.md#definition",
+              "tools_triggered": "go_to_definition",
+              "expected_behavior": "math.ts, line 2, character 17."
+            },
+            {
+              "description": "Use the bundled example workspace. List uses across the workspace without the declaration.",
+              "prompt": "Which lines use double in main.ts? Leave out its definition.",
+              "file_attachment_urls": [
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/typescript-lsp/skills/setup-typescript-lsp/example/main.ts",
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/typescript-lsp/skills/setup-typescript-lsp/example/math.ts"
+              ],
+              "expected_output_url": "https://github.com/frontboat/LSP-MCP/blob/main/review/typescript/results.md#references",
+              "tools_triggered": "find_references",
+              "expected_behavior": "Include both calls in main.ts, on lines 2 and 3. Exclude the declaration in math.ts."
+            },
+            {
+              "description": "Use the bundled example workspace. Read type information and documentation.",
+              "prompt": "Show the signature and documentation for double in math.ts.",
+              "file_attachment_urls": [
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/typescript-lsp/skills/setup-typescript-lsp/example/main.ts",
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/typescript-lsp/skills/setup-typescript-lsp/example/math.ts"
+              ],
+              "expected_output_url": "https://github.com/frontboat/LSP-MCP/blob/main/review/typescript/results.md#hover",
+              "tools_triggered": "hover",
+              "expected_behavior": "Show a function accepting and returning number and the documentation “Doubles a count.”"
+            },
+            {
+              "description": "Use the bundled example workspace. Include the declaration when finding references.",
+              "prompt": "List references to double, including the definition in math.ts.",
+              "file_attachment_urls": [
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/typescript-lsp/skills/setup-typescript-lsp/example/main.ts",
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/typescript-lsp/skills/setup-typescript-lsp/example/math.ts"
+              ],
+              "expected_output_url": "https://github.com/frontboat/LSP-MCP/blob/main/review/typescript/results.md#include-declaration",
+              "tools_triggered": "find_references",
+              "expected_behavior": "Include the definition on line 2 of math.ts and both calls."
+            },
+            {
+              "description": "Use the bundled example workspace. Resolve a symbol after an emoji using one-based UTF-16 positions.",
+              "prompt": "What does the symbol at main.ts, line 3, UTF-16 character 30 resolve to?",
+              "file_attachment_urls": [
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/typescript-lsp/skills/setup-typescript-lsp/example/main.ts",
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/typescript-lsp/skills/setup-typescript-lsp/example/math.ts"
+              ],
+              "expected_output_url": "https://github.com/frontboat/LSP-MCP/blob/main/review/typescript/results.md#utf-16",
+              "tools_triggered": "go_to_definition",
+              "expected_behavior": "math.ts, line 2, character 17."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Use the bundled example workspace. A request to edit a symbol is outside the three read-only tools. Explain that the plugin offers navigation only.",
+              "prompt": "Using only this plugin, rename double to twice in every file.",
+              "file_attachment_urls": [
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/typescript-lsp/skills/setup-typescript-lsp/example/main.ts",
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/typescript-lsp/skills/setup-typescript-lsp/example/math.ts"
+              ],
+              "expected_output_url": "https://github.com/frontboat/LSP-MCP/blob/main/review/typescript/results.md#rename"
+            },
+            {
+              "description": "Use the bundled example workspace. Plain text is outside the supported source languages. Report the unsupported type if a lookup is attempted.",
+              "prompt": "What is the inferred type of double in notes.txt?",
+              "file_attachment_urls": [
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/typescript-lsp/skills/setup-typescript-lsp/example/notes.txt"
+              ],
+              "expected_output_url": "https://github.com/frontboat/LSP-MCP/blob/main/review/typescript/results.md#unsupported-file"
+            },
+            {
+              "description": "Use the bundled example workspace. The tool requires a saved file. Ask the user to save the new buffer before requesting its definition.",
+              "prompt": "Follow the symbol in my unsaved new.ts buffer using this plugin.",
+              "file_attachment_urls": [],
+              "expected_output_url": "https://github.com/frontboat/LSP-MCP/blob/main/review/typescript/results.md#unsaved-file"
+            }
+          ]
+        },
+        "demo_recording_url": "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/review/typescript/walkthrough.mp4",
+        "commerce": false,
+        "commerce_description": "Local LSP Tools provides local source navigation without purchases, subscriptions, or payment processing."
+      },
+      "publication": {
+        "countries": [],
+        "release_notes": "Adds a setup skill with a runnable example, navigation previews, and review cases. Includes publisher, support, privacy, and usage information.",
+        "translations": {
+          "es": {
+            "subtitle": "Explora tipos e importaciones",
+            "description": "Sigue importaciones, busca referencias y consulta tipos inferidos y documentación en archivos TypeScript y JavaScript guardados. El plugin utiliza el compilador de TypeScript instalado en tu equipo."
+          }
+        }
+      }
+    }
+  },
+  "homepage": "https://github.com/frontboat/LSP-MCP#readme",
+  "repository": "https://github.com/frontboat/LSP-MCP",
+  "license": "LicenseRef-Proprietary"
+}

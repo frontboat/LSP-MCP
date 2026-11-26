@@ -1,0 +1,160 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "rust-lsp",
+  "version": "0.1.3",
+  "author": {
+    "name": "Local LSP Tools",
+    "email": "156139764+frontboat@users.noreply.github.com",
+    "url": "https://github.com/frontboat"
+  },
+  "description": "Find definitions, references, types, and documentation in local Rust projects using rust-analyzer.",
+  "keywords": [
+    "Rust",
+    "rust-analyzer",
+    "Cargo",
+    "code navigation",
+    "LSP"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Rust LSP",
+        "shortDescription": "Trace Rust symbols and types",
+        "longDescription": "Follow a method call to its definition or find the code that uses a struct before you change its fields. Rust LSP asks rust-analyzer about the saved code in your workspace and returns file paths and line numbers. You can also read a function’s signature and rustdoc, including for standard library items when their sources are installed.",
+        "developerName": "Local LSP Tools",
+        "category": "Developer Tools",
+        "capabilities": [
+          "Read"
+        ],
+        "defaultPrompt": [
+          "Trace a method call to its definition",
+          "Find where a public struct is used in my workspace",
+          "Show the signature and rustdoc for a function"
+        ],
+        "brandColor": "#B64E27",
+        "logo": "./assets/icon.png",
+        "logoDark": "./assets/icon-on-light.svg",
+        "composerIcon": "./assets/icon-on-light.svg",
+        "websiteURL": "https://github.com/frontboat/LSP-MCP#readme",
+        "supportURL": "https://github.com/frontboat/LSP-MCP/issues",
+        "privacyPolicyURL": "https://github.com/frontboat/LSP-MCP/blob/main/PRIVACY.md",
+        "termsOfServiceURL": "https://github.com/frontboat/LSP-MCP/blob/main/LICENSE",
+        "brandColorDark": "#F2A47D",
+        "composerIconDark": "./assets/icon-on-light.svg",
+        "screenshots": [
+          "./assets/navigation.png"
+        ]
+      },
+      "onboardingSkill": "./skills/setup-rust-lsp/SKILL.md",
+      "hooks": [],
+      "requires_local_executor": true,
+      "review": {
+        "prompts": [
+          "Trace a method call to its definition",
+          "Find where a public struct is used in my workspace",
+          "Show the signature and rustdoc for a function"
+        ],
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Use the bundled example workspace. Follow a function call across files.",
+              "prompt": "Where is the function called on line 2 of src/lib.rs defined?",
+              "file_attachment_urls": [
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/rust-lsp/skills/setup-rust-lsp/example/src/lib.rs",
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/rust-lsp/skills/setup-rust-lsp/example/src/math.rs"
+              ],
+              "expected_output_url": "https://github.com/frontboat/LSP-MCP/blob/main/review/rust/results.md#definition",
+              "tools_triggered": "go_to_definition",
+              "expected_behavior": "src/math.rs, line 2, character 8."
+            },
+            {
+              "description": "Use the bundled example workspace. List uses across the workspace without the declaration.",
+              "prompt": "Which lines use double in src/lib.rs? Leave out its definition.",
+              "file_attachment_urls": [
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/rust-lsp/skills/setup-rust-lsp/example/src/lib.rs",
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/rust-lsp/skills/setup-rust-lsp/example/src/math.rs"
+              ],
+              "expected_output_url": "https://github.com/frontboat/LSP-MCP/blob/main/review/rust/results.md#references",
+              "tools_triggered": "find_references",
+              "expected_behavior": "Include both calls in src/lib.rs, on lines 2 and 3. Exclude the declaration in src/math.rs."
+            },
+            {
+              "description": "Use the bundled example workspace. Read type information and documentation.",
+              "prompt": "Show the signature and documentation for double in src/math.rs.",
+              "file_attachment_urls": [
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/rust-lsp/skills/setup-rust-lsp/example/src/lib.rs",
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/rust-lsp/skills/setup-rust-lsp/example/src/math.rs"
+              ],
+              "expected_output_url": "https://github.com/frontboat/LSP-MCP/blob/main/review/rust/results.md#hover",
+              "tools_triggered": "hover",
+              "expected_behavior": "Show a function accepting and returning i32 and the documentation “Doubles a count.”"
+            },
+            {
+              "description": "Use the bundled example workspace. Include the declaration when finding references.",
+              "prompt": "List references to double, including the definition in src/math.rs.",
+              "file_attachment_urls": [
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/rust-lsp/skills/setup-rust-lsp/example/src/lib.rs",
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/rust-lsp/skills/setup-rust-lsp/example/src/math.rs"
+              ],
+              "expected_output_url": "https://github.com/frontboat/LSP-MCP/blob/main/review/rust/results.md#include-declaration",
+              "tools_triggered": "find_references",
+              "expected_behavior": "Include the definition on line 2 of src/math.rs and both calls."
+            },
+            {
+              "description": "Use the bundled example workspace. Resolve a symbol after an emoji using one-based UTF-16 positions.",
+              "prompt": "What does the symbol at src/lib.rs, line 3, UTF-16 character 39 resolve to?",
+              "file_attachment_urls": [
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/rust-lsp/skills/setup-rust-lsp/example/src/lib.rs",
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/rust-lsp/skills/setup-rust-lsp/example/src/math.rs"
+              ],
+              "expected_output_url": "https://github.com/frontboat/LSP-MCP/blob/main/review/rust/results.md#utf-16",
+              "tools_triggered": "go_to_definition",
+              "expected_behavior": "src/math.rs, line 2, character 8."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Use the bundled example workspace. A request to edit a symbol is outside the three read-only tools. Explain that the plugin offers navigation only.",
+              "prompt": "Using only this plugin, rename double to twice in every file.",
+              "file_attachment_urls": [
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/rust-lsp/skills/setup-rust-lsp/example/src/lib.rs",
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/rust-lsp/skills/setup-rust-lsp/example/src/math.rs"
+              ],
+              "expected_output_url": "https://github.com/frontboat/LSP-MCP/blob/main/review/rust/results.md#rename"
+            },
+            {
+              "description": "Use the bundled example workspace. Plain text is outside the supported source languages. Report the unsupported type if a lookup is attempted.",
+              "prompt": "What is the inferred type of double in notes.txt?",
+              "file_attachment_urls": [
+                "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/plugins/rust-lsp/skills/setup-rust-lsp/example/notes.txt"
+              ],
+              "expected_output_url": "https://github.com/frontboat/LSP-MCP/blob/main/review/rust/results.md#unsupported-file"
+            },
+            {
+              "description": "Use the bundled example workspace. The tool requires a saved file. Ask the user to save the new buffer before requesting its definition.",
+              "prompt": "Follow the symbol in my unsaved new.rs buffer using this plugin.",
+              "file_attachment_urls": [],
+              "expected_output_url": "https://github.com/frontboat/LSP-MCP/blob/main/review/rust/results.md#unsaved-file"
+            }
+          ]
+        },
+        "demo_recording_url": "https://raw.githubusercontent.com/frontboat/LSP-MCP/main/review/rust/walkthrough.mp4",
+        "commerce": false,
+        "commerce_description": "Local LSP Tools provides local source navigation without purchases, subscriptions, or payment processing."
+      },
+      "publication": {
+        "countries": [],
+        "release_notes": "Adds a setup skill with a runnable example, navigation previews, and review cases. Includes publisher, support, privacy, and usage information.",
+        "translations": {
+          "es": {
+            "subtitle": "Explora símbolos de Rust",
+            "description": "Sigue una llamada hasta su definición, busca usos de un símbolo y consulta firmas y documentación en archivos Rust guardados. El plugin utiliza rust-analyzer en tu equipo."
+          }
+        }
+      }
+    }
+  },
+  "homepage": "https://github.com/frontboat/LSP-MCP#readme",
+  "repository": "https://github.com/frontboat/LSP-MCP",
+  "license": "LicenseRef-Proprietary"
+}

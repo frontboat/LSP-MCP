@@ -1,0 +1,4 @@
+/// Doubles a count.
+pub fn double(count: i32) -> i32 {
+    count * 2
+}

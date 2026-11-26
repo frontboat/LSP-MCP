@@ -1,0 +1,6 @@
+/target/
+/dist/
+/plugins/*/bin/
+.DS_Store
+/mcp-docs/
+/.agents/skills/

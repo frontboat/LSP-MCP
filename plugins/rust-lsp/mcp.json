@@ -1,0 +1,15 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "rust-lsp": {
+      "type": "stdio",
+      "command": "./bin/lsp-mcp",
+      "args": [
+        "--language",
+        "rust"
+      ],
+      "env": { "NO_COLOR": "1" },
+      "cwd": "${PLUGIN_ROOT}"
+    }
+  }
+}
