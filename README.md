@@ -28,6 +28,15 @@ codex plugin marketplace upgrade lsp-mcp-local
 
 Then rerun `codex plugin add` for each plugin you installed.
 
+## Remove
+
+```sh
+codex plugin remove rust-lsp@lsp-mcp-local
+codex plugin remove typescript-lsp@lsp-mcp-local
+```
+
+To remove the marketplace too, run `codex plugin marketplace remove lsp-mcp-local`.
+
 <details>
 <summary>Tools</summary>
 
